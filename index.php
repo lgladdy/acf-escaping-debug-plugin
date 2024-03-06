@@ -20,6 +20,18 @@ function acf_enable_detailed_escape_logging_to_php_error_log( $function, $select
 		$value = implode( ', ', $value );
 	}
 
+	$interested_tags = array( '<script', '<svg', '<iframe' );
+	$match           = false;
+	foreach ( $interested_tags as $tag ) {
+		if ( stripos( $value, $tag ) !== false ) {
+			$match = true;
+		}
+	}
+
+	if ( ! $match ) {
+		return;
+	}
+
 	$field_type              = is_array( $field_object ) && isset( $field_object['type'] ) ? $field_object['type'] : 'text';
 	$field_type_escapes_html = acf_field_type_supports( $field_type, 'escaping_html' );
 
